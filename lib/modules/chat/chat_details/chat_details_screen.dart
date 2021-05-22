@@ -75,6 +75,7 @@ class ChatDetailsScreen extends StatelessWidget {
                             itemCount: SocialCubit.get(context).messages.length,),
                       ),
                       //Spacer(),
+                      SizedBox(height: 10,),
                       Container(
                         padding: EdgeInsets.only(left: 10.0),
                         decoration: BoxDecoration(
@@ -103,14 +104,14 @@ class ChatDetailsScreen extends StatelessWidget {
                               color: Colors.blue[700],
                               child: Center(
                                 child: MaterialButton(onPressed: (){
-                                  SocialCubit.get(context).sendMessage(
-                                    receiverId: model.uId,
-                                    dateTime: DateTime.now().toString(),
-                                    text: _messageTextController.text,
-                                  );
-                                  //_controller.jumpTo(_controller.positions.first);
-                                  ScrollPosition position = _controller.positions.first;
-                                  //SocialCubit.get(context).positionListView(controller: _controller);
+                                  if(_messageTextController.text != ''){
+                                    SocialCubit.get(context).sendMessage(
+                                      receiverId: model.uId,
+                                      dateTime: DateTime.now().toString(),
+                                      text: _messageTextController.text,
+                                    );
+                                    _messageTextController.text = '';
+                                  }
                                 },
                                   minWidth: 1.0,
                                   child: Icon(
@@ -150,18 +151,23 @@ class ChatDetailsScreen extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 10.0,
-          vertical: 5.0,
+          horizontal: 15.0,
+          vertical: 10.0,
         ),
-        child: Text(messageModel.text),
+        child: Text(messageModel.text, style: TextStyle(
+        color: Colors.black87,
+          fontWeight: FontWeight.w400,
+          fontSize: 18.0,
+        ),),
       ),
     ),
   );
   Widget _buildMyMessage(MessageModel messageModel) => Align(
     alignment: AlignmentDirectional.centerEnd,
     child: Container(
+      margin: EdgeInsets.only(left: 70.0),
       decoration: BoxDecoration(
-          color: Colors.blue[300],
+          color: Colors.blue[700],
           borderRadius: BorderRadiusDirectional.only(
             bottomStart: Radius.circular(10),
             topEnd: Radius.circular(10),
@@ -170,10 +176,14 @@ class ChatDetailsScreen extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 10.0,
-          vertical: 5.0,
+          horizontal: 15.0,
+          vertical: 10.0,
         ),
-        child: Text(messageModel.text),
+        child: Text(messageModel.text,style: TextStyle(
+          color: Colors.grey[200],
+          fontWeight: FontWeight.w400,
+          fontSize: 18.0,
+        ),),
       ),
     ),
   );

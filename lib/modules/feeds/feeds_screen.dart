@@ -8,61 +8,84 @@ import 'package:social/shared/style/broken_icons.dart';
 class FeedsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SocialCubit, SocialState>(
-  listener: (context, state) {
-    // TODO: implement listener
-  },
-  builder: (context, state) {
-    return ConditionalBuilder(condition: SocialCubit.get(context).posts.length > 0,
-      builder: (BuildContext context) => SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5.0,
-            margin: EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Image(
-                  image: NetworkImage(
-                      "https://image.freepik.com/free-photo/impressed-surprised-man-points-away-blank-space_273609-40694.jpg"),
-                  fit: BoxFit.cover,
-                  height: 200.0,
-                  width: double.infinity,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Communicate With Friends',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+    return Builder(builder: (BuildContext context){
+      return BlocConsumer<SocialCubit, SocialState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+
+          return ConditionalBuilder(
+            condition: SocialCubit.get(context).posts.length > 0,
+            builder: (BuildContext context) => RefreshIndicator(
+              onRefresh:(){
+               return SocialCubit.get(context).getPosts();
+              },
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    Card(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      elevation: 5.0,
+                      margin: EdgeInsets.all(8.0),
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          Image(
+                            image: NetworkImage(
+                                "https://image.freepik.com/free-photo/impressed-surprised-man-points-away-blank-space_273609-40694.jpg"),
+                            fit: BoxFit.cover,
+                            height: 200.0,
+                            width: double.infinity,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Communicate With Friends',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                    (
+
+                      ListView.separated(
+
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+
+                          return _buildPostItem(
+                              SocialCubit.get(context).posts[index], index, context);
+                        },
+                        itemCount: SocialCubit.get(context).posts.length,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            SizedBox(
+                              height: 8.0,
+                            ),
+                      )
+                    )
+                  ],
+                ),
+              ),
             ),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => _buildPostItem(SocialCubit.get(context).posts[index],index,context),
-            itemCount:SocialCubit.get(context).posts.length ,
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
-              height: 8.0,
-            ),
-          )
-        ],
-      ),
-    ),
-      fallback:(BuildContext context) => Center(child: CircularProgressIndicator(),),
-      
-    );
-  },
-);
+            fallback: (BuildContext context) {
+             // SocialCubit.get(context).posts = [];
+             // SocialCubit.get(context).getPosts();
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          );
+        },
+      );
+    });
   }
 
   Widget _buildPostItem(PostModel model, index, context) => Card(
@@ -78,8 +101,7 @@ class FeedsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 25.0,
-                    backgroundImage: NetworkImage(
-                        "${model.image}"),
+                    backgroundImage: NetworkImage("${model.image}"),
                   ),
                   SizedBox(
                     width: 15.0,
@@ -174,15 +196,14 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              if(model.postImages != '')
+              if (model.postImages != '')
                 Container(
                   width: double.infinity,
                   height: 140.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4.0),
                     image: DecorationImage(
-                      image: NetworkImage(
-                          "${model.postImages}"),
+                      image: NetworkImage("${model.postImages}"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -299,7 +320,8 @@ class FeedsScreen extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
-                      SocialCubit.get(context).likePost(SocialCubit.get(context).postId[index]);
+                      SocialCubit.get(context)
+                          .likePost(SocialCubit.get(context).postId[index]);
                     },
                   ),
                 ],

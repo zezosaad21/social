@@ -252,9 +252,12 @@ class SocialCubit extends Cubit<SocialState> {
   List<String> postId = [];
   List<int> postLikes = [];
 
-  void getPosts() {
+  Future<void> getPosts() {
+    posts = [];
+    postId = [];
+    postLikes = [];
     emit(SocialGetPostLoadingState());
-    FirebaseFirestore.instance.collection('posts').get().then((value) {
+   return FirebaseFirestore.instance.collection('posts').get().then((value) {
       value.docs.forEach((element) {
         element.reference.collection('likes').get().then((value) {
           postId.add(element.id);
@@ -302,11 +305,10 @@ class SocialCubit extends Cubit<SocialState> {
   }
 
   void sendMessage({
-  @required String receiverId,
-  @required String dateTime,
-  @required String text,
-  })
-  {
+    @required String receiverId,
+    @required String dateTime,
+    @required String text,
+  }) {
     MessageModel mModel = MessageModel(
       text: text,
       dateTime: dateTime,
@@ -315,16 +317,15 @@ class SocialCubit extends Cubit<SocialState> {
     );
 
     FirebaseFirestore.instance
-    .collection('users')
-    .doc(model.uId)
-    .collection('chats')
-    .doc(receiverId)
-    .collection('messages')
-    .add(mModel.toJson())
-    .then((value) {
+        .collection('users')
+        .doc(model.uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .add(mModel.toJson())
+        .then((value) {
       emit(SocialSendMessageSuccessState());
-    })
-    .catchError((error){
+    }).catchError((error) {
       emit(SocialSendMessageErrorState());
     });
 
@@ -337,16 +338,16 @@ class SocialCubit extends Cubit<SocialState> {
         .add(mModel.toJson())
         .then((value) {
       emit(SocialSendMessageSuccessState());
-    })
-        .catchError((error){
+    }).catchError((error) {
       emit(SocialSendMessageErrorState());
     });
   }
 
   List<MessageModel> messages = [];
 
-  void getMessages({ @required String receiverId,})
-  {
+  void getMessages({
+    @required String receiverId,
+  }) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(model.uId)
@@ -356,18 +357,11 @@ class SocialCubit extends Cubit<SocialState> {
         .orderBy('dateTime', descending: true)
         .snapshots()
         .listen((event) {
-          messages = [];
-          event.docs.forEach((element) {
-            messages.add(MessageModel.fromJson(element.data()));
-          });
-          emit(SocialGetMessageSuccessState());
+      messages = [];
+      event.docs.forEach((element) {
+        messages.add(MessageModel.fromJson(element.data()));
+      });
+      emit(SocialGetMessageSuccessState());
     });
-  }
-
-  void positionListView({ScrollController controller})
-  {
-    double scrollPosition = controller.position.maxScrollExtent;
-    controller.jumpTo(scrollPosition);
-    emit(SocialPositionState());
   }
 }
