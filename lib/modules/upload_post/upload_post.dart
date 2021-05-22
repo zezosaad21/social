@@ -46,14 +46,14 @@ class UploadPost extends StatelessWidget {
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                          "https://image.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"),
+                          "${SocialCubit.get(context).model.image}"),
                     ),
                     SizedBox(
                       width: 15.0,
                     ),
                     Expanded(
                       child: Text(
-                        'Abdelazez Saad',
+                        '${SocialCubit.get(context).model.name}',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,

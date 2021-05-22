@@ -100,7 +100,7 @@ class FeedsScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: 5,
+                              width: 2,
                             ),
                             Icon(
                               Icons.check_circle,

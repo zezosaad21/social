@@ -13,6 +13,10 @@ class SocialGetPostLoadingState extends SocialState {}
 class SocialGetPostSuccessState extends SocialState {}
 class SocialGetPostErrorState extends SocialState {}
 
+class SocialGetAllUserLoadingState extends SocialState {}
+class SocialGetAllUserSuccessState extends SocialState {}
+class SocialGetAllUserErrorState extends SocialState {}
+
 class SocilaChangeButtomNav extends SocialState {}
 
 class SocilaUploadpost extends SocialState {}
@@ -42,3 +46,11 @@ class SocialCreatePostErrorState extends SocialState {}
 class SocialPostImagePickedSuccessState extends SocialState {}
 class SocialPostImagePickedErrorState extends SocialState {}
 class SocialPostImageRemoveState extends SocialState {}
+
+// chat
+
+class SocialSendMessageSuccessState extends SocialState {}
+class SocialSendMessageErrorState extends SocialState {}
+
+class SocialGetMessageSuccessState extends SocialState {}
+class SocialPositionState extends SocialState {}
