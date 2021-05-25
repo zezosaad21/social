@@ -37,6 +37,7 @@ dependencies:
   image_picker:
   flutter_login:
   conditional_builder: ^1.0.2
+  firebase_messaging: ^10.0.0
 
 dev_dependencies:
   flutter_test:
